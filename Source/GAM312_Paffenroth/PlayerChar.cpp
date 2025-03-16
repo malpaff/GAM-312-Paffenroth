@@ -41,28 +41,33 @@ void APlayerChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("JumpEvent", IE_Released, this, &APlayerChar::StopJump);
 }
 
+// Function that handles forward and backward movement
 void APlayerChar::MoveForward(float axisValue)
 {
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
 	AddMovementInput(Direction, axisValue);
 }
 
+// Function that handles the right and left movement
 void APlayerChar::MoveRight(float axisValue)
 {
 	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
 	AddMovementInput(Direction, axisValue);
 }
 
+// Function that starts the jumping action
 void APlayerChar::StartJump()
 {
 	bPressedJump = true;
 }
 
+// Function that stops the jumping action
 void APlayerChar::StopJump()
 {
 	bPressedJump = false;
 }
 
+// Placeholder function for finding an object
 void APlayerChar::FindObject()
 {
 }
