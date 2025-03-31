@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "Resource_M.h"
 #include "Kismet/GameplayStatics.h"
+#include "BuildingPart.h"
 #include "PlayerChar.generated.h"
 
 UCLASS()
@@ -27,6 +28,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+// --- Movement and Interaction ---
+
 	// Function to move the player character forward and backward
 	UFUNCTION()
 		void MoveForward(float axisValue);
@@ -47,9 +50,13 @@ public:
 	UFUNCTION()
 		void FindObject();
 
+// --- Camera component --- 
+
 	// Camera component that provides the player's viewpoint
 	UPROPERTY(VisibleAnywhere)
 		UCameraComponent* PlayerCamComp;
+
+// --- Stats ---
 
 	// Property to allow the setting of player health
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
@@ -62,6 +69,8 @@ public:
 	// Property to allow the setting of player stamina
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Stats")
 		float Stamina = 100.0f;
+
+// --- Resource Management ---
 
 	// Resource counts for each resource
 	UPROPERTY(EditAnywhere, Category = "Resources")
@@ -81,9 +90,31 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Resources")
 		TArray<FString> ResourcesNameArray;
 
+// --- Visual Feedback ---
+
 	// Material for spawning the hit decal
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HitMarker")
 		UMaterialInterface* hitDecal;
+
+// --- Building System --- 
+
+	// Inventory of building system
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Building Supplies")
+		TArray<int> BuildingArray;
+	
+	// Whether the player is in building mode
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool isBuilding;
+
+	// Building class to spawn
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		TSubclassOf<ABuildingPart> BuildPartClass;
+
+	// Currently spawned building piece
+	UPROPERTY()
+		ABuildingPart* spawnedPart;
+
+// --- Stat functions ---
 	
 	// Adjusts the player health by a given amount
 	UFUNCTION(BlueprintCallable)
@@ -101,7 +132,23 @@ public:
 	UFUNCTION()
 		void DecreaseStats();
 
+// --- Resource Functions ---
+
 	// Adds a specific resource type and amount to the player's inventory
 	UFUNCTION()
 		void GiveResource(int32 amount, FString resourceType);
+
+	// Deducts and adds building part
+	UFUNCTION(BlueprintCallable)
+		void UpdateResources(float woodAmount, float stoneAmount, FString buildingObject);
+
+// Building Functions
+
+	// Spawns building part
+	UFUNCTION(BlueprintCallable)
+		void SpawnBuilding(int buildingID, bool& isSuccess);
+
+	// Rotates building part
+	UFUNCTION()
+		void RotateBuilding();
 };
