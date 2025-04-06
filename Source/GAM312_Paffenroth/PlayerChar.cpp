@@ -36,6 +36,9 @@ void APlayerChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Updates Player Widget
+	playerUI->UpdateBars(Health, Hunger, Stamina);
+
 	// If player is in building mode and the part is spawned, determine spawn location
 	if (isBuilding && spawnedPart)
 	{
