@@ -105,8 +105,6 @@ void APlayerChar::FindObject()
 	FVector StartLocation = PlayerCamComp->GetComponentLocation();
 	FVector Direction = PlayerCamComp->GetForwardVector() * 800.0f;
 	FVector EndLocation = StartLocation + Direction;
-	// Visual line trace used for debugging
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Green, false, 2.0f);
 
 	// Set up collision query to ignore the player
 	FCollisionQueryParams QueryParams;
