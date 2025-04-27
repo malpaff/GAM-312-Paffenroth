@@ -27,7 +27,7 @@ void APlayerChar::BeginPlay()
 
 	// Starts a repeating timer that decreases stats every 2 seconds
 	FTimerHandle StatsTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(StatsTimerHandle, this, &APlayerChar::DecreaseStats, 2.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(StatsTimerHandle, this, &APlayerChar::DecreaseStats, 1.0f, true);
 
 	// Initializes objective widget if the widget is valid
 	if (objWidget)
@@ -140,10 +140,6 @@ void APlayerChar::FindObject()
 						matsCollected = matsCollected + resourceValue;
 						objWidget->UpdatematOBJ(matsCollected);
 
-						// Debug message for resource collection
-						check(GEngine != nullptr);
-						GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Collected"));
-
 						// Spawn a decal at the hit location
 						UGameplayStatics::SpawnDecalAtLocation(GetWorld(), hitDecal, FVector(10.0f, 10.0f, 10.0f), HitResult.Location, FRotator(-90, 0, 0), 2.0f);
 
@@ -155,7 +151,6 @@ void APlayerChar::FindObject()
 						// Resource is depleted, destroy the actor
 						HitResource->Destroy();
 						check(GEngine != nullptr);
-						GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Resource Depleted"));
 					}
 				}
 			}
@@ -206,12 +201,6 @@ void APlayerChar::DecreaseStats()
 	if (Hunger <= 0)
 	{
 		SetHealth(-3.0f);
-	}
-
-	// Display stamina for debugging
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, FString::Printf(TEXT("Stamina: %f"), Stamina));
 	}
 }
 
